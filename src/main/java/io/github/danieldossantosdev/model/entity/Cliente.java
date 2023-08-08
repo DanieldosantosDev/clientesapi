@@ -1,14 +1,22 @@
 package io.github.danieldossantosdev.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.br.CPF;
 
 import java.time.LocalDate;
 
 @Entity
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 
 public class Cliente {
     @Id
@@ -16,12 +24,20 @@ public class Cliente {
 
     private Integer id;
     @Column(nullable = false,length = 150)
+    @NotEmpty
     private String nome;
-    @Getter
     @Column(nullable = false,length = 11)
+    @NotNull
+    @CPF
     private String cpf;
-    @Column(name = "data_cadastro")
+@JsonFormat(pattern="dd/MM/yyyy")
+    @Column(name = "data_cadastro",updatable = false)
     private LocalDate dataCadastro;
+@PrePersist
+    public void prePersist(){
+    setDataCadastro(LocalDate.now());
+
+    }
 
 
 }
