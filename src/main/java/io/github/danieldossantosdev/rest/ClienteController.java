@@ -2,6 +2,7 @@ package io.github.danieldossantosdev.rest;
 
 import io.github.danieldossantosdev.model.entity.Cliente;
 import io.github.danieldossantosdev.model.repository.ClienteRepository;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -18,8 +19,8 @@ public class ClienteController {
     }
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Cliente salvar( @RequestBody Cliente cliente ){
-return repository.save(cliente);
+    public Cliente salvar( @RequestBody @Valid Cliente cliente ){
+        return repository.save(cliente);
 
     }
     @GetMapping("{id}")
@@ -46,7 +47,7 @@ return repository.save(cliente);
                 .findById(id)
                 .map(cliente -> {
                     clienteAtualizado.setId(cliente.getId());
-                   return repository.save(clienteAtualizado);
+                    return repository.save(clienteAtualizado);
 
                 })
                 .orElseThrow( () -> new ResponseStatusException(HttpStatus.NOT_FOUND));

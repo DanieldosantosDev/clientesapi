@@ -9,7 +9,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.br.CPF;
-
 import java.time.LocalDate;
 
 @Entity
@@ -17,25 +16,25 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-
 public class Cliente {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
     private Integer id;
     @Column(nullable = false,length = 150)
-    @NotEmpty
+    @NotEmpty(message = "{campo.nome.obrigatorio}")
     private String nome;
+
     @Column(nullable = false,length = 11)
-    @NotNull
-    @CPF
+    @NotNull(message = "{campo.cpf.obrigatorio}")
+    @CPF(message = "{campo.cpf.invalido}")
     private String cpf;
-@JsonFormat(pattern="dd/MM/yyyy")
+
+    @JsonFormat(pattern="dd/MM/yyyy")
     @Column(name = "data_cadastro",updatable = false)
     private LocalDate dataCadastro;
-@PrePersist
+    @PrePersist
     public void prePersist(){
-    setDataCadastro(LocalDate.now());
+        setDataCadastro(LocalDate.now());
 
     }
 
